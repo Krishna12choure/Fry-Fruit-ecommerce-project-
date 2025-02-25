@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+
+<!-- Blog Section -->
+<div class="container mt-4">
+    <h1 class="text-center fw-bold text-primary">Our Blog</h1>
+    <p class="text-center text-muted">Stay updated with our latest articles on fruits, health, and recipes!</p>
+
+    <div class="row" id="blog-list">
+        {% for blog in blogs %}
+            <div class="col-md-6 mt-2 mb-2 d-flex align-items-stretch" id="blog-card-{{ blog.id }}">
+                <div class="blog-card p-4 rounded shadow-sm bg-light d-flex flex-column">
+                    <!-- Blog Image (if exists) -->
+                    {% if blog.image %}
+                        <div class="overflow-hidden rounded mb-3" style="height: 250px;">
+                            <img src="{{ blog.image.url }}" alt="Blog Image" class="img-fluid w-100 h-100 object-fit-contain">
+                        </div>
+                    {% endif %}
+
+                    <h2 class="fw-bold text-success">{{ blog.title }}</h2>
+                    <p class="text-muted"><strong>By {{ blog.author }} | {{ blog.publish_date|date:"F j, Y" }}</strong></p>
+
+                    <!-- Full Blog Content -->
+                    <p class="text-dark">
+                        {{ blog.content }}
+                    </p>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">No blogs available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+<style>
+    /* Blog Card Styling */
+    .blog-card {
+        border-left: 5px solid #f39c12;
+        transition: transform 0.3s;
+        display: flex;
+    }
+
+    .blog-card:hover {
+        transform: scale(1.02);
+    }
+
+    /* Optional Image Styling */
+    .blog-card img {
+        max-height: 200px;
+        object-fit: cover;
+        width: 100%;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">User Dashboard</h2>
+
+    <div class="row">
+        <!-- Total Orders Card -->
+        <div class="col-md-6">
+            <div class="card shadow p-3">
+                <h5 class="text-center"><i class="fas fa-box"></i> My Orders</h5>
+                <hr>
+                <p class="text-center">{{ total_orders }}</p>
+            </div>
+        </div>
+
+        <!-- Pending Orders Card -->
+        <div class="col-md-6">
+            <div class="card shadow p-3">
+                <h5 class="text-center"><i class="fas fa-clock"></i> Pending Orders</h5>
+                <hr>
+                <p class="text-center">{{ pending_orders }}</p>
+            </div>
+        </div>
+
+        <!-- Completed Orders Card -->
+
+    </div>
+
+    <!-- Second Row with two cards -->
+    <div class="row mt-6">
+
+         <div class="col-md-6">
+            <div class="card shadow p-3">
+                <h5 class="text-center"><i class="fas fa-check-circle"></i> Completed Orders</h5>
+                <hr>
+                <p class="text-center">{{ completed_orders }}</p>
+            </div>
+        </div>
+
+
+        <!-- Canceled Orders Card -->
+        <div class="col-md-6">
+            <div class="card shadow p-3">
+                <h5 class="text-center"><i class="fas fa-ban"></i> Canceled Orders</h5>
+                <hr>
+                <p class="text-center">{{ canceled_orders }}</p>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+{% endblock %}

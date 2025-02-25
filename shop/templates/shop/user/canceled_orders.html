@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Canceled Orders{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Canceled Orders</h2>
+
+    {% if canceled_orders %}
+        <table class="table table-striped table-bordered text-center">
+            <thead class="table-light text-white ">
+                <tr>
+                    <th style="width: 70px;">Sr. No.</th>
+                    <th>Total Amount</th>
+                    <th>Payment Method</th>
+                    <th>Cancel Date</th>  <!-- Changed to Cancel Date -->
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in canceled_orders %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>₹{{ order.total_amount }}</td>
+                    <td>{{ order.payment_method }}</td>
+                    <td>{{ order.created_at|date:"d M Y" }}</td>  <!-- Displaying created_at as Cancel Date -->
+                    <td>
+                        <a href="{% url 'cancel_view' order.id %}" class="btn btn-info btn-sm">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No canceled orders found.</p>
+    {% endif %}
+</div>
+{% endblock %}

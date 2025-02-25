@@ -1,0 +1,50 @@
+{% extends 'adminbase.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-5">Welcome to the Admin Dashboard</h2>
+
+    <div class="row">
+        <!-- Total Users Card -->
+        <div class="col-md-3">
+            <div class="stats-card users bg-warning-light text-dark text-center p-3 rounded shadow-sm hover-shadow">
+                <i class="fas fa-users fa-3x"></i>
+                <div>Users</div>
+                <hr>
+                <div class="card-number">{{ total_users }}</div>
+            </div>
+        </div>
+
+        <!-- Total Products Card -->
+        <div class="col-md-3">
+            <div class="stats-card products bg-info-light text-dark text-center p-3 rounded shadow-sm hover-shadow">
+                <i class="fas fa-boxes fa-3x"></i>
+                <div>Products</div>
+                <hr>
+                <div class="card-number">{{ total_products }}</div>
+            </div>
+        </div>
+
+        <!-- Total Payment Card -->
+        <div class="col-md-3">
+            <div class="stats-card payment bg-success-light text-dark text-center p-3 rounded shadow-sm hover-shadow">
+                <i class="fas fa-credit-card fa-3x"></i>
+                <div>Total Payment</div>
+                <hr>
+                <div class="card-number">₹ {{ total_payment|floatformat:2 }}</div>
+            </div>
+        </div>
+
+        <!-- Today's Orders Card -->
+        <div class="col-md-3">
+            <div class="stats-card orders bg-danger-light text-dark text-center p-3 rounded shadow-sm hover-shadow">
+                <i class="fas fa-calendar-day fa-3x"></i>
+                <div>Today's Orders</div>
+                <hr>
+                <div class="card-number">{{ todays_orders }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

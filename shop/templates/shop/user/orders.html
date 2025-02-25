@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4 mt-2 text-center" style="font-weight:900;">My Orders</h2>
+    {% if orders %}
+    <table class="table table-bordered text-center">
+        <thead>
+        <tr>
+            <th style="width:70px;">Sr. No.</th>
+            <th>Products name</th>
+            <th>Total Amount</th>
+            <th>Order Date</th>  <!-- Display order date here -->
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <!-- Display product details for each order without bullets -->
+                {% for item in order.items %}
+                    {{ item.product.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>₹{{ order.total_amount }}</td>
+
+            <!-- Display order date -->
+            <td>{{ order.order_date|date:"d M Y" }}</td>
+
+            <td>
+                {% if order.status == "Canceled" %}
+                <span class="badge bg-danger">Canceled</span>
+                {% elif order.status == "Completed" %}
+                <span class="badge bg-success">Completed</span>
+                {% else %}
+                <span class="badge bg-warning">Pending</span>
+                {% endif %}
+            </td>
+
+            <td>
+                <a href="{% url 'view_order' order.id %}" class="btn btn-primary btn-sm">View</a>
+                {% if order.status == "Pending" %}
+                <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger btn-sm">Cancel</a>
+                {% endif %}
+            </td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No orders found.</p>
+    {% endif %}
+</div>
+{% endblock %}

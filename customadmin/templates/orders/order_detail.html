@@ -1,0 +1,66 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center text-primary mb-4">Order Details - #{{ order.id }}</h2>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+    <h4 class="text-success">Customer Details</h4>
+    {% if delivery_address %}
+        <p><strong>Full Name:</strong> {{ delivery_address.name }}</p>
+        <p><strong>Email:</strong> {{ delivery_address.email }}</p>
+        <p><strong>Phone:</strong> {{ delivery_address.phone_number }}</p>
+        <p><strong>Address:</strong> {{ delivery_address.address }}, {{ delivery_address.zip }}</p>
+    {% else %}
+        <p class="text-danger">No delivery address found!</p>
+    {% endif %}
+</div>
+
+            <div class="col-md-6">
+                <h4 class="text-success">Order Summary</h4>
+                <p><strong>User:</strong> {{ order.user.username }}</p>
+                 <p><strong>Total Amount:</strong> <span class="text-danger">₹{{ order.total_amount }}</span></p>
+                <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+                <p><strong>Status:</strong>
+                    <span class="badge {% if order.status == 'Completed' %}bg-success{% elif order.status == 'Pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                        {{ order.status }}
+                    </span>
+                </p>
+                <p><strong>Order Date:</strong> {{ order.created_at|date:"d M, Y" }}</p>
+            </div>
+        </div>
+
+        <h3 class="text-center text-secondary">Ordered Items</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₹{{ item.price }}</td>
+                        <td>₹{{ item.total_price }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'all_orders' %}" class="btn btn-secondary">Back to Orders</a>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

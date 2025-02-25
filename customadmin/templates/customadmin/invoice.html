@@ -1,0 +1,172 @@
+{% extends 'adminbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .invoice-container {
+        max-width: 800px;
+        margin: auto;
+        border: 1px solid #ddd;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background: #fff;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .store-info {
+        text-align: right;
+    }
+    .store-info h2 {
+        color: goldenrod;
+    }
+    h1 {
+        color: red;
+    }
+    hr {
+        border: 1px solid #ddd;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border: 1px solid black;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .total-row {
+        font-weight: bold;
+    }
+    .thank-you {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    .invoice-header div {
+        display: flex;
+        flex-direction: column;
+    }
+    .logo {
+        max-width: 100%; /* Ensures logo keeps its original size */
+        height: auto;
+    }
+    .left-section, .store-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    .print-btn-container {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .print-btn {
+        padding: 8px 15px;
+        font-size: 14px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    .print-btn:hover {
+        background-color: #0056b3;
+    }
+    /* Hide print button when printing */
+    @media print {
+        .print-btn-container {
+            display: none;
+        }
+    }
+</style>
+
+<div class="print-btn-container text-end" style="margin-right: 70px;">
+    <button class="print-btn" onclick="window.print()">Print</button>
+</div>
+
+<div class="invoice-container">
+    <div class="header">
+        <div class="left-section">
+            <img src="{% static 'images/frylogo.ico' %}" alt="Fry Fruit Logo" class="logo">
+            <p class="mt-2"><strong>Address:</strong> 456 Fruit Lane, Pune, Maharashtra, India</p>
+        </div>
+        <div class="store-info">
+            <h1 class="mb-3">Fry Fruits</h1>
+            <p>+91 9089767856</p>
+            <p>info@fryfruit.com</p>
+        </div>
+    </div>
+
+    <hr class="mt-0 mb-2">
+
+    <div class="invoice-header">
+        <div>
+            <p><strong>Name:</strong> {{ delivery_address.name|default:"Not Available" }}</p>
+            <p><strong>Address:</strong> {{ delivery_address.address|default:"Not Available" }} {{ delivery_address.zip }}</p>
+        </div>
+        <div style="text-align: right;">
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Date:</strong> {{ invoice_date }}</p>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Serial No</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_items %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₹{{ item.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="width: 100%; display: flex; justify-content: flex-end;">
+        <table style="width: 50%; border: 1px solid black;">
+            <tr class="total-row">
+                <td style="text-align:right;">Subtotal:</td>
+                <td style="text-align:center;">₹{{ order.total_amount }}</td>
+            </tr>
+            <tr class="total-row">
+                <td style="text-align:right;">Shipping Charges:</td>
+                <td style="text-align:center;">₹5.00</td>
+            </tr>
+            <tr class="total-row">
+                <td style="text-align:right;">Total GST (18%):</td>
+                <td style="text-align:center;">₹{{ gst_amount }}</td>
+            </tr>
+            <tr class="total-row">
+                <td style="text-align:right;">Payable Total:</td>
+                <td style="text-align:center;">₹{{ payable_total }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="thank-you">Thank You !</div>
+</div>
+{% endblock %}

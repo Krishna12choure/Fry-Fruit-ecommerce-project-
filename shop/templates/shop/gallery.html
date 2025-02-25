@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Gallery - Fry Fruit{% endblock %}
+
+{% block content %}
+<!-- Gallery Section -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Our Gallery</h2>
+    <div class="row">
+        {% for image in gallery_images %}
+        <div class="col-md-4 mb-4">
+            <div class="gallery-item position-relative">
+                <!-- Image that opens the modal on click -->
+                <img src="{{ image.image.url }}" class="gallery-img img-fluid rounded shadow"
+                     alt="{{ image.description }}" style="width: 100%; height: 250px; object-fit: cover;"
+                     onclick="openModal('{{ image.image.url }}', '{{ image.description }}', {{ forloop.counter }})">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal for Viewing Images with Carousel -->
+<div class="modal fade" id="lightboxModal" tabindex="-1" aria-labelledby="lightboxLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body position-relative">
+                <!-- Close button (X) -->
+                <button class="btn-close position-absolute" style="top: 10px; right: 10px; background-color: red; padding: 10px;" data-bs-dismiss="modal"></button>
+
+                <!-- Carousel -->
+                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner" id="carouselInner">
+                        <!-- Dynamically populated carousel images -->
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Array of images with their descriptions for the carousel
+    let galleryImages = [
+        {% for image in gallery_images %}
+        {
+            src: "{{ image.image.url }}",
+            alt: "{{ image.description }}",
+        },
+        {% endfor %}
+    ];
+
+    function openModal(imageUrl, imageAlt, index) {
+        // Create the modal and carousel dynamically
+        const modal = new bootstrap.Modal(document.getElementById('lightboxModal'));
+        const carouselInner = document.getElementById("carouselInner");
+
+        // Clear previous carousel content
+        carouselInner.innerHTML = "";
+
+        // Make the clicked image active in the carousel
+        const activeClass = index === 1 ? 'active' : ''; // Make the first image active
+        const imageMarkup = `
+            <div class="carousel-item ${activeClass}">
+                <img src="${imageUrl}" class="d-block w-100" alt="${imageAlt}">
+            </div>
+        `;
+        carouselInner.innerHTML = imageMarkup;
+
+        // Add the rest of the images to the carousel
+        galleryImages.forEach((image, i) => {
+            if (i + 1 !== index) {  // Skip the clicked image
+                carouselInner.innerHTML += `
+                    <div class="carousel-item">
+                        <img src="${image.src}" class="d-block w-100" alt="${image.alt}">
+                    </div>
+                `;
+            }
+        });
+
+        // Open the modal
+        modal.show();
+    }
+</script>
+{% endblock %}

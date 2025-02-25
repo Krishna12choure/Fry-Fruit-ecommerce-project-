@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fry Fruit - Home{% endblock %}
+
+{% block content %}
+
+<!-- Bootstrap Carousel Slider -->
+<div id="carouselExampleIndicators" class="carousel slide m-0 p-0" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{% static 'images/slider1.jpg' %}" class="d-block w-100" alt="Fresh Dry Fruits" style="height: 500px; object-fit: cover;">
+            <div class="carousel-caption text-center">
+                <h3>Premium Quality Fruits</h3>
+                <p>Fresh, Healthy & Delicious</p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <img src="{% static 'images/slider2.jpg' %}" class="d-block w-100" alt="Healthy Nuts" style="height: 500px; object-fit: cover;">
+            <div class="carousel-caption text-center">
+                <h3>Handpicked & Organic</h3>
+                <p>Pure Goodness in Every Bite</p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <img src="{% static 'images/slider3.jpg' %}" class="d-block w-100" alt="Best Dry Fruits Online" style="height: 500px; object-fit: cover;">
+            <div class="carousel-caption text-center">
+                <h3>Buy Online & Get Discounts</h3>
+                <p>Fast Delivery & Best Prices</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+<!-- Hero Section (No extra space below carousel) -->
+<div class="hero-section text-center text-white d-flex align-items-center justify-content-center position-relative m-0 p-0"
+     style="height: 80vh; background: url('{% static 'images/banner.jpg' %}') no-repeat center center/cover;">
+
+    <div class="overlay p-4 text-center">
+        <h1 class="display-4 fw-bold">Welcome to Fry Fruit</h1>
+        <p class="lead">Premium Dry Fruits & Nuts, Delivered Fresh to Your Doorstep</p>
+        <a href="{% url 'products' %}" class="btn btn-lg btn-warning mt-3">Shop Now</a>
+    </div>
+</div>
+
+
+<!-- Featured Products Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Featured Products</h2>
+    <div class="row justify-content-center">
+        {% for product in featured_products %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card shadow-sm d-flex flex-column" style="height: 100%;">
+                <!-- Set a fixed height for the images, ensuring they look consistent -->
+                <div class="product-image-container" style="height: 250px; overflow: hidden;">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded" style="object-fit: cover; width: 100%; height: 100%;">
+                </div>
+                <div class="card-body text-center d-flex flex-column justify-content-between" style="flex-grow: 1;">
+                    <h3 class="mt-3">{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:15 }}</p>
+
+                    {% if product.discount_price %}
+                        <p><del>₹{{ product.price }}</del> <strong class="text-danger">₹{{ product.discount_price }}</strong></p>
+                    {% else %}
+                        <p><strong>Price: ₹{{ product.price }}</strong></p>
+                    {% endif %}
+
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+<!-- Testimonials Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-4" style="font-size: 2.5rem; font-weight: 700;">What Our Customers Say</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 shadow-sm" style="border-radius: 10px; background-color: #f9f9f9; border: 1px solid #e0e0e0;">
+                <div class="card-body text-center">
+
+                    <p class="card-text mt-3" style="font-size: 1.2rem; color: #555;">"Best quality dry fruits I've ever had! Highly recommend."</p>
+                    <strong style="font-size: 1.1rem; color: #333;">- Rahul S.</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 shadow-sm" style="border-radius: 10px; background-color: #f4f4f4; border: 1px solid #e0e0e0;">
+                <div class="card-body text-center">
+
+                    <p class="card-text mt-3" style="font-size: 1.2rem; color: #555;">"Fresh, tasty, and worth the price! Love the packaging."</p>
+                    <strong style="font-size: 1.1rem; color: #333;">- Priya K.</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 shadow-sm" style="border-radius: 10px; background-color: #f2f9f2; border: 1px solid #e0e0e0;">
+                <div class="card-body text-center">
+
+                    <p class="card-text mt-3" style="font-size: 1.2rem; color: #555;">"Great variety and excellent customer service. 5 stars!"</p>
+                    <strong style="font-size: 1.1rem; color: #333;">- Aman G.</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

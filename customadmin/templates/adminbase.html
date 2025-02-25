@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/frylogo.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.ico' %}">
+    <link  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        /* Full Page Layout */
+        body, html {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Topbar Styling */
+        .topbar {
+            background: #343a40;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            height: 60px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .topbar h2 {
+            margin: 0;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+            margin-right: 20px;
+        }
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            background: white;
+            right: 0;
+            top: 50px;
+            width: 200px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .user-dropdown a {
+            color: black;
+            padding: 12px;
+            display: block;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .user-dropdown a:hover {
+            background: #f1f1f1;
+        }
+        .user-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        /* Sidebar Styling */
+        .main-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px); /* Full height minus topbar */
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #343a40;
+            color: white;
+            padding-top: 20px;
+            transition: 0.3s;
+            flex-shrink: 0;
+            height: 100%;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 15px 20px;
+            font-size: 16px;
+        }
+        .sidebar a:hover {
+            background: #495057;
+            border-radius: 5px;
+        }
+
+        /* Content Area */
+        .content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+            height: 100%;
+        }
+
+        /* Toggle Sidebar */
+        .sidebar.collapsed {
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* Responsive Design for Sidebar */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .sidebar.collapsed {
+                width: 0;
+            }
+        }
+
+        /* User Icon for Small Screens */
+        @media (max-width: 576px) {
+            .user-icon {
+                font-size: 16px;
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+    @media print {
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .topbar, .sidebar, .print-btn-container {
+        display: none !important; /* Hide UI elements */
+    }
+
+    .invoice-container {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: none; /* Remove borders on print */
+        box-shadow: none;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid black;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 6px;
+        text-align: center;
+        border: 1px solid black;
+    }
+
+    .total-table {
+        width: 50%;
+        margin-left: auto;
+    }
+
+    .thank-you {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <button class="btn btn-light btn-sm" id="toggleSidebar">☰</button>
+        <h2>Admin Panel</h2>
+
+        <!-- User Menu -->
+        <div class="user-menu">
+            <div class="user-icon" id="userIcon">
+                {{ request.user.first_name|first|default:"A" }}
+            </div>
+            <div class="user-dropdown" id="userDropdown">
+                <p class="text-center text-dark m-2">
+                    {{ request.user.username|default:"Admin" }}
+                </p>
+                <a href="{% url 'customadmin_logout' %}" class="text-center">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container (Sidebar + Content) -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <a href="{% url 'customadmin_dashboard' %}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'product_list' %}">
+                <i class="fas fa-tachometer-alt"></i> Product
+            </a>
+            <a href="{% url 'discount_management' %}">
+                <i class="fas fa-tachometer-alt"></i> Discount Management
+            </a>
+            <a href="{% url 'gallery_list' %}">
+                <i class="fas fa-tachometer-alt"></i> Gallery
+            </a>
+            <a href="{% url 'blog_list' %}">
+                <i class="fas fa-tachometer-alt"></i> Blog
+            </a>
+            <a href="{% url 'all_orders' %}">
+                <i class="fas fa-tachometer-alt"></i> Orders
+            </a>
+
+        </div>
+
+        <!-- Page Content -->
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Toggle User Dropdown
+            $("#userIcon").click(function (e) {
+                e.stopPropagation();
+                $("#userDropdown").toggle();
+            });
+
+            // Hide Dropdown When Clicking Outside
+            $(document).click(function (e) {
+                if (!$(e.target).closest(".user-menu").length) {
+                    $("#userDropdown").hide();
+                }
+            });
+
+            // Toggle Sidebar
+            $("#toggleSidebar").click(function () {
+                $("#sidebar").toggleClass("collapsed");
+            });
+        });
+    </script>
+
+    <!-- FontAwesome Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+</body>
+</html>

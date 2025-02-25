@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+</head>
+<body>
+    <h2>Order Invoice</h2>
+    <p>Order ID: {{ order.id }}</p>
+    <p>User: {{ order.user.username }}</p>
+    <p>Total Amount: ₹{{ order.total_amount }}</p>
+    <p>Status: {% if order.is_paid %}Paid{% else %}Pending{% endif %}</p>
+</body>
+</html>

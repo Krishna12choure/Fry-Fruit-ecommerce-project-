@@ -1,0 +1,23 @@
+{% extends 'adminbase.html' %}
+
+{% block content %}
+    <h3 class="mb-4 text-center">Add New Blog</h3>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <form method="POST" enctype="multipart/form-data" class="bg-light p-4 rounded shadow-sm">  <!-- Add enctype -->
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="form-group mb-3">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">Add</button>
+                            <a href="{% url 'blog_list' %}" class="btn btn-secondary btn-lg ml-3">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

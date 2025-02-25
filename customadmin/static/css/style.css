@@ -1,0 +1,37 @@
+
+    /* Light background colors for the cards */
+    .bg-warning-light {
+        background-color: #ffecb3 !important; /* Light yellow */
+    }
+    .bg-info-light {
+        background-color: #cce7ff !important; /* Light blue */
+    }
+    .bg-success-light {
+        background-color: #d4edda !important; /* Light green */
+    }
+    .bg-danger-light {
+        background-color: #f8d7da !important; /* Light red */
+    }
+
+    /* Text and icon colors */
+    .text-dark {
+        color: #343a40 !important;
+    }
+
+    /* Box shadow for the cards */
+    .shadow-sm {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hover effect on cards */
+    .hover-shadow:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    /* Card Number Styling */
+    .card-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+

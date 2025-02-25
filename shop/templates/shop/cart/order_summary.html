@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-center">Order Summary</h2>
+<p>Order ID: {{ order.id }}</p>
+<p>Total Amount: ${{ order.total_amount }}</p>
+<p>Payment Method: {{ order.payment_method }}</p>
+<p>Status: {% if order.payment_status %}Paid{% else %}Pending{% endif %}</p>
+<a href="{% url 'generate_invoice' order.id %}" class="btn btn-secondary">Download Invoice</a>
+{% endblock %}
